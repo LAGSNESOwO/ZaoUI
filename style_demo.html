@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>ZaoUI - 现代化界面组件库</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="zaoui.css" />
+  <style>
+    body {
+      padding-bottom: 30px; /* Add some padding at the bottom for better scrolling */
+    }
+    .component-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid var(--dynamic-color-secondary);
+      border-radius: 8px;
+      background-color: var(--dynamic-color-surface);
+    }
+    .component-section h3 {
+      margin-top: 0;
+      color: var(--dynamic-color-primary);
+      border-bottom: 1px solid var(--dynamic-color-secondary);
+      padding-bottom: 5px;
+    }
+    .color-palette div {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 4px;
+      color: white;
+      text-align: center;
+    }
+    /* New component styles (examples) */
+    .slider-container {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+    }
+    .slider-container label {
+      margin-right: 10px;
+    }
+    .slider-container input[type="range"] {
+      flex-grow: 1;
+    }
+    .progress-bar-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    .progress-bar {
+      width: 60%; /* Example progress */
+      height: 20px;
+      background-color: var(--dynamic-color-primary);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 20px;
+      color: var(--dynamic-color-on-primary);
+    }
+    .alert {
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid;
+    }
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border-color: #c3e6cb;
+    }
+    .alert-warning {
+      background-color: #fff3cd;
+      color: #856404;
+      border-color: #ffeeba;
+    }
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+    }
+    .tooltip-container {
+      position: relative;
+      display: inline-block;
+      margin-top:10px;
+    }
+    .tooltip-text {
+      visibility: hidden;
+      width: 120px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%; /* Position the tooltip above the text */
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip-container:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    table.styled-table {
+        border-collapse: collapse;
+        margin: 15px 0;
+        font-size: 0.9em;
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+    .styled-table thead tr {
+        background-color: var(--dynamic-color-primary);
+        color: var(--dynamic-color-on-primary);
+        text-align: left;
+        font-weight: bold;
+    }
+    .styled-table th,
+    .styled-table td {
+        padding: 10px 12px;
+    }
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3; /* For light mode */
+    }
+    [data-theme="dark"] .styled-table tbody tr:nth-of-type(even) {
+        background-color: #2a2a2a; /* For dark mode */
+    }
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid var(--dynamic-color-primary);
+    }
+    .badge {
+      display: inline-block;
+      padding: .35em .65em;
+      font-size: .75em;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--dynamic-color-on-primary);
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: .375rem; /* 6px */
+      background-color: var(--dynamic-color-primary);
+      margin: 2px;
+    }
+    .badge-secondary {
+        background-color: var(--dynamic-color-secondary);
+        color: var(--dynamic-color-on-secondary);
+    }
+    .badge-danger {
+        background-color: var(--dynamic-color-danger);
+        color: #fff;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Header (copied from index.html for consistency) -->
+  <header>
+    <button id="openNavDemo" onclick="toggleSidebar()">☰</button>
+    <h1 class="header-title">ZaoUI</h1>
+    <button id="darkModeToggleDemo" class="dark-mode-toggle" onclick="toggleDarkModeDemo()" aria-label="切换深色模式">🌓</button>
+  </header>
+
+  <!-- Main Content with Sidebar -->
+  <div class="demo-container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item active" onclick="scrollToSection('introSection')">介绍</li>
+        <li class="sidebar-nav-item" onclick="scrollToSection('colorSection')">颜色面板</li>
+        <li class="sidebar-nav-item" onclick="scrollToSection('typographySection')">排版</li>
+        <li class="sidebar-nav-item" onclick="scrollToSection('buttonSection')">按钮</li>
+        <li class="sidebar-nav-item" onclick="scrollToSection('cardSection')">卡片</li>
+        <li class="sidebar-nav-item" onclick="scrollToSection('formSection')">表单和输入框</li>
+        <li class="sidebar-nav-item" onclick="scrollToSection('modalSection')">模态框</li>
+        <li class="sidebar-nav-item" onclick="scrollToSection('navSection')">导航元素</li>
+        <li class="sidebar-nav-item" onclick="scrollToSection('newComponentsSection')">新增组件</li>
+      </ul>
+    </div>
+
+    <!-- 此元素仅用于移动设备时显示，但代码中会自动创建桌面版切换按钮 -->
+    <div class="mobile-sidebar-toggle" id="mobileSidebarToggle" onclick="toggleSidebar()">☰</div>
+
+    <!-- Main content area -->
+    <div class="sidebar-content">
+      <!-- Introduction Section -->
+      <div id="introSection">
+        <h1>ZaoUI 组件库</h1>
+        <p>ZaoUI 是一个轻量级、现代化的 UI 组件库，提供了丰富的界面元素和布局选项。</p>
+        <p>点击左侧导航栏可以浏览不同的组件类别。</p>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Section: Color Palette -->
+      <div class="component-section" id="colorSection">
+        <h3>颜色面板</h3>
+        <div class="color-palette">
+          <div style="background-color: var(--dynamic-color-primary);">主色调</div>
+          <div style="background-color: var(--dynamic-color-secondary); color: var(--dynamic-color-on-secondary);">次要色</div>
+          <div style="background-color: var(--dynamic-color-background); color: var(--dynamic-color-on-background);">背景色</div>
+          <div style="background-color: var(--dynamic-color-surface); color: var(--dynamic-color-on-surface);">表面色</div>
+          <div style="background-color: var(--dynamic-color-danger);">危险色</div>
+        </div>
+      </div>
+
+      <!-- Section: Typography -->
+      <div class="component-section" id="typographySection">
+        <h3>排版</h3>
+        <h1>标题 1</h1>
+        <h2>标题 2 (Card Title Style)</h2>
+        <h3>标题 3</h3>
+        <h4>标题 4</h4>
+        <h5>标题 5</h5>
+        <h6>标题 6</h6>
+        <p>这是一个标准段落。Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada.</p>
+        <p>带有<a href="#">链接</a>的段落。</p>
+        <code>这是内联代码。</code>
+        <pre>这是预格式化的文本块。
+适合显示代码片段。
+第三行。</pre>
+        <blockquote>这是引用块。它会突出显示。</blockquote>
+      </div>
+
+      <!-- Section: Buttons -->
+      <div class="component-section" id="buttonSection">
+        <h3>按钮</h3>
+        <p>头部按钮 (圆形):</p>
+        <button style="background-color: var(--dynamic-color-secondary); color: var(--dynamic-color-on-secondary); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">☰</button>
+        <button style="background-color: var(--dynamic-color-secondary); color: var(--dynamic-color-on-secondary); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">🌓</button>
+        <hr style="margin: 10px 0;">
+        <p>标准按钮:</p>
+        <button class="button">普通按钮</button>
+        <button class="collapse-btn">折叠/展开</button>
+        <button class="checkall-btn">全选/反选</button>
+        <button class="add-enchant-btn">添加附魔</button>
+        <button class="danger-button">危险操作</button>
+        <hr style="margin: 10px 0;">
+        <p>链接作为按钮:</p>
+        <a href="#" class="button" style="text-decoration: none; display:inline-block; margin-top:0;">链接按钮</a>
+      </div>
+
+      <!-- Section: Cards -->
+      <div class="component-section" id="cardSection">
+        <h3>卡片</h3>
+        <div class="card">
+          <h2>简单卡片标题</h2>
+          <p>这是一个简单卡片的内容。它使用 <code>.card</code> 类。</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>带有头部和关闭按钮的卡片</h2>
+            <button class="close-card-button" onclick="this.parentElement.parentElement.style.display='none'">×</button>
+          </div>
+          <p>这个卡片有明显的头部区域和关闭按钮。</p>
+          <button class="button" style="margin-top:10px;">卡片内的操作</button>
+        </div>
+        <div class="card">
+          <h2>带按钮的卡片</h2>
+          <div class="card-buttons">
+            <button class="collapse-btn">选项 1</button>
+            <button class="checkall-btn">选项 2</button>
+            <button class="add-enchant-btn">选项 3</button>
+          </div>
+          <p>这个卡片演示了 <code>.card-buttons</code> 容器。</p>
+        </div>
+      </div>
+
+      <!-- Section: Forms & Inputs -->
+      <div class="component-section" id="formSection">
+        <h3>表单和输入框</h3>
+        <form onsubmit="event.preventDefault(); alert('Form submitted (demo)');">
+          <div>
+            <label for="demoText">文本输入:</label>
+            <input type="text" id="demoText" class="text-field" placeholder="在此输入文本" />
+          </div>
+          <div style="margin-top:12px;">
+            <label for="demoNumber">数字输入:</label>
+            <input type="number" id="demoNumber" class="text-field" value="42" />
+          </div>
+          <div style="margin-top:12px;">
+            <label for="demoColor">颜色输入:</label>
+            <input type="color" id="demoColor" class="text-field" value="#4285F4" style="height:40px;" />
+          </div>
+          <div style="margin-top:12px;">
+            <label for="demoDate">日期输入:</label>
+            <input type="date" id="demoDate" class="text-field" />
+          </div>
+          <div style="margin-top:12px;">
+            <label for="demoPassword">密码输入:</label>
+            <input type="password" id="demoPassword" class="text-field" placeholder="输入密码" />
+          </div>
+          <div style="margin-top:12px;">
+            <label for="demoEmail">邮箱输入:</label>
+            <input type="email" id="demoEmail" class="text-field" placeholder="user@example.com" />
+          </div>
+          <div style="margin-top:12px;">
+            <label for="demoSearch">搜索输入:</label>
+            <input type="search" id="demoSearch" class="text-field" placeholder="搜索..." />
+          </div>
+          <div style="margin-top:12px;">
+            <label for="demoTextarea">文本区域:</label>
+            <textarea id="demoTextarea" class="text-field" placeholder="输入更长的消息" style="height:80px;"></textarea>
+          </div>
+          <div style="margin-top: 12px;">
+            <label>单选按钮:</label>
+            <div style="margin-top: 8px;">
+              <label style="display:block; margin-bottom:6px;">
+                <input type="radio" name="demoRadio" value="option1" checked /> 选项 1
+              </label>
+              <label style="display:block; margin-bottom:6px;">
+                <input type="radio" name="demoRadio" value="option2" /> 选项 2
+              </label>
+            </div>
+          </div>
+          <div style="margin-top: 12px;">
+            <label>复选框:</label>
+            <div style="margin-bottom: 8px;">
+              <label><input type="checkbox" value="check1" checked> 复选框 1</label>
+            </div>
+            <div style="margin-bottom: 8px;">
+              <label><input type="checkbox" value="check2"> 复选框 2</label>
+            </div>
+            <div style="margin-bottom: 8px;">
+              <label><input type="checkbox" value="check3" disabled> 复选框 3 (禁用)</label>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <label for="demoSelect">下拉选择框 (原生):</label>
+            <select id="demoSelect" class="text-field">
+              <option value="opt1">选项 1</option>
+              <option value="opt2">选项 2</option>
+              <option value="opt3">选项 3 - 更长的选项</option>
+            </select>
+          </div>
+          <div class="slider-container" style="margin-top:12px;">
+            <label for="demoRange">范围滑块:</label>
+            <input type="range" id="demoRange" class="text-field" min="0" max="100" value="50" style="padding:0;" />
+          </div>
+          <button type="submit" class="button" style="margin-top:15px;">提交表单</button>
+        </form>
+      </div>
+
+      <!-- Section: Modals (Example Trigger) -->
+      <div class="component-section" id="modalSection">
+        <h3>模态框</h3>
+        <p>这里有一个按钮来触发演示模态框。</p>
+        <button class="button" onclick="openDemoModal('demoModal1')">打开演示模态框</button>
+        <button class="button" style="margin-left:8px;" onclick="openDemoModal('demoModal2')">打开另一个模态框</button>
+      </div>
+
+      <!-- Section: Navigation Elements -->
+      <div class="component-section" id="navSection">
+        <h3>导航元素</h3>
+        <p>导航抽屉样式 (概念性展示):</p>
+        <div style="background-color: var(--dynamic-color-surface); border: 1px solid var(--dynamic-color-background); border-radius:8px; max-width:250px;">
+          <ul style="list-style-type: none; padding: 0; margin: 0;">
+            <li style="padding: 16px; border-bottom: 1px solid var(--dynamic-color-background); cursor: pointer;" onclick="alert('Nav item 1 clicked')">导航项 1</li>
+            <li style="padding: 16px; border-bottom: 1px solid var(--dynamic-color-background); cursor: pointer;" onclick="alert('Nav item 2 clicked')">导航项 2</li>
+            <li style="padding: 16px; cursor: pointer;" onclick="alert('Nav item 3 clicked')">导航项 3</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Section: New UI Elements -->
+      <div class="component-section" id="newComponentsSection">
+        <h3>新增组件 (示例)</h3>
+
+        <h4>进度条</h4>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="demoProgressBar">60%</div>
+        </div>
+        <button class="button" style="font-size:0.8em; padding:4px 8px;" onclick="updateProgressBar()">动画进度</button>
+
+        <h4>提醒/通知</h4>
+        <div class="alert alert-success" role="alert">
+          <strong>成功!</strong> 这是一个成功提醒。
+        </div>
+        <div class="alert alert-warning" role="alert">
+          <strong>警告!</strong> 这是一个警告提醒。
+        </div>
+        <div class="alert alert-danger" role="alert">
+          <strong>错误!</strong> 这是一个危险提醒。
+        </div>
+        
+        <h4>工具提示</h4>
+        <div class="tooltip-container">
+          <button class="button">鼠标悬停在我上面</button>
+          <span class="tooltip-text">这是一个工具提示!</span>
+        </div>
+        <span class="tooltip-container" style="margin-left:10px;">
+          一些文本带有 <strong style="text-decoration:underline dotted;">工具提示</strong>.
+          <span class="tooltip-text">文本的工具提示!</span>
+        </span>
+
+        <h4>表格</h4>
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>名称</th>
+              <th>角色</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>张三</td>
+              <td>管理员</td>
+              <td>激活</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>李四</td>
+              <td>编辑</td>
+              <td>待定</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>王五</td>
+              <td>用户</td>
+              <td>未激活</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>徽章/标签</h4>
+        <p>
+          此项有一个 <span class="badge">主要徽章</span>.
+          您也可以使用 <span class="badge badge-secondary">次要徽章</span>
+          和 <span class="badge badge-danger">危险徽章</span>.
+          用于计数 <span class="badge">23</span> 或状态很有用。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jump to top button -->
+  <div class="jump-to-top" id="jumpToTop" onclick="scrollToTop()">↑</div>
+
+  <!-- Demo Modals (basic structure) -->
+  <div class="modal" id="demoModal1">
+    <div class="modal-content">
+      <h3 style="margin-top:0">演示模态框 1</h3>
+      <p>这是一个基本的模态窗口。</p>
+      <button class="button" onclick="closeDemoModal('demoModal1')">关闭</button>
+    </div>
+  </div>
+  <div class="modal" id="demoModal2">
+    <div class="modal-content">
+      <h3 style="margin-top:0">另一个模态框 (自定义内容)</h3>
+      <p>模态框可以在其中包含各种内容。</p>
+      <label for="modalInput">模态框内的输入:</label>
+      <input type="text" id="modalInput" class="text-field" placeholder="输入一些内容...">
+      <button class="button" style="margin-top:10px;" onclick="closeDemoModal('demoModal2')">确定</button>
+      <button class="button" style="margin-left:8px;" onclick="closeDemoModal('demoModal2')">取消</button>
+    </div>
+  </div>
+
+  <!-- 引入外部 JavaScript 文件 -->
+  <script src="zaoui.js"></script>
+</body>
+</html> 
